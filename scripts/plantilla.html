@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan de Ventas 2026</title>
+<style>
+:root{
+  --navy:#2E3192; --navy-d:#23256E; --blue:#006BB9; --gray:#595959; --gray-d:#434343; --red:#C00000;
+  --green:#568949; --green-d:#3A5C31; --lav:#8283BE; --pa:#CCCCCC; --ok:#599816;
+  --fg:#252423; --muted:#9C9FA8; --line:#E1E1E1; --bg:#F3F3F5;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:Verdana,Geneva,sans-serif}
+/* ---------- barra de navegación ---------- */
+.appbar{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #d6d6d6;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.appbar-in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:24px;padding:0 16px;min-height:52px;flex-wrap:wrap}
+.brand{font-family:"Segoe UI",Verdana,sans-serif;font-weight:600;font-size:17px;color:var(--navy-d);white-space:nowrap}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{border:0;background:none;font:inherit;font-size:12.5px;color:var(--gray);padding:16px 12px 13px;border-bottom:3px solid transparent;cursor:pointer}
+.tab:hover{color:var(--navy-d)}
+.tab[aria-selected="true"]{color:var(--navy-d);border-bottom-color:var(--navy-d);font-weight:bold}
+.corte{margin-left:auto;font-size:11px;color:var(--gray);white-space:nowrap}
+@media (max-width:600px){.appbar{position:static}.tab{padding:12px 8px 10px}.corte{margin:0 0 8px}}
+/* ---------- hoja ---------- */
+main{max-width:1280px;margin:0 auto;padding:20px 16px 40px}
+.sheet{display:none}
+.sheet.on{display:block}
+.phead{background:#fff;border-radius:6px;padding:16px 20px 14px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.phead h1{font-family:"Segoe UI",Verdana,sans-serif;font-weight:400;font-size:24px;margin:0 0 10px;padding-bottom:10px;border-bottom:2px solid var(--navy-d);color:var(--fg)}
+.phead p{margin:0;font-family:"Segoe UI",Verdana,sans-serif;font-size:13px;color:var(--navy-d)}
+.phead p.hint{font-size:11px;color:#777;margin:8px 0 0;font-family:Verdana,Geneva,sans-serif}
+.sec-lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#888;margin:22px 2px 8px}
+.grid{display:grid;gap:16px}
+.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+.split{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+.kpis3{grid-template-columns:minmax(0,1.2fr) minmax(0,1.2fr) minmax(0,.85fr)}
+@media (max-width:1000px){.kpis3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.kpis3>.kpi:last-child{grid-column:1/-1}}
+@media (max-width:820px){.kpis,.split,.kpis3{grid-template-columns:minmax(0,1fr)}.kpis3>.kpi:last-child{grid-column:auto}}
+.panel{background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:12px 14px;min-width:0}
+.ptitle{font-size:11pt;color:var(--gray);margin:0 0 6px;font-weight:normal}
+.psub{font-size:8pt;color:#888;margin:-4px 0 8px}
+.chart{position:relative;width:100%}
+svg text{font-family:Verdana,Geneva,sans-serif}
+.clk{cursor:pointer}
+/* ---------- recuadros KPI ---------- */
+.kpi{background:#fff;border:2px solid var(--navy);border-radius:15px;padding:16px 12px 14px;text-align:center;display:flex;flex-direction:column;justify-content:center;min-height:150px;position:relative}
+.kpi .ttl{font-size:10.5pt;color:var(--gray)}
+.kpi .val{font-size:28pt;line-height:1.2;margin-top:6px;color:var(--gray)}
+.kpi .sub,.kpi .cap{font-size:8pt;color:var(--fg);font-family:"Segoe UI",Verdana,sans-serif;line-height:1.35}
+.kpi .sub{margin-top:4px}
+.kpi .cap{margin-top:8px}
+.kpi .bar{height:7px;border-radius:4px;background:#E6E7F1;margin:10px auto 0;width:80%;overflow:hidden}
+.kpi .bar i{display:block;height:100%}
+.kpi.duo{flex-direction:row;align-items:stretch;padding:14px 6px}
+.kpi.duo>div{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 10px;min-width:0}
+.kpi.duo>div+div{border-left:1px solid #D9DAEA}
+.kpi.duo .val{font-size:24pt}
+@media (max-width:420px){.kpi.duo .val{font-size:19pt}.kpi.duo .ttl{font-size:9.5pt}}
+.kpi.red{border-color:var(--red)} .kpi.green{border-color:var(--green)}
+.kpi.filt::after{content:"filtrado";position:absolute;top:8px;right:12px;font-size:8px;color:#fff;background:var(--navy-d);border-radius:8px;padding:2px 6px}
+/* ---------- tarjetas por macroetapa ---------- */
+.mcards{display:flex;flex-direction:column;gap:12px;height:100%}
+.mcard{flex:1;display:flex;border:1px solid #d9d9d9;border-radius:8px;overflow:hidden;cursor:pointer;background:#fff;min-height:84px}
+.mcard.dim{opacity:.4}
+.mcard.sel{box-shadow:0 0 0 2px var(--navy-d)}
+.mcard .hd{width:42%;max-width:170px;color:#fff;font-size:9pt;display:flex;align-items:center;padding:0 12px;line-height:1.3}
+.mcard .bd{flex:1;display:flex;align-items:center;justify-content:space-around}
+.mcard .v1{font-size:20pt;color:var(--gray-d);text-align:center}
+.mcard .v2{font-size:16pt;color:var(--muted);text-align:center}
+.mcard .lb{font-size:8pt;color:var(--gray);display:block;margin-top:2px}
+/* ---------- matriz avance por región ---------- */
+.mtx{font-size:9pt;color:var(--gray);overflow-x:auto}
+.mtx table{border-collapse:collapse;width:100%}
+.mtx th{font-weight:bold;color:var(--fg);text-align:center;padding:6px 8px;border-bottom:1px solid #b3b3b3;white-space:nowrap}
+.mtx td{padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.mtx tr.dim td{opacity:.4}
+.mtx tr.sel td{background:#EEF0FA}
+.mtx tbody tr{cursor:pointer}
+.mtx tbody tr:hover td{background:#F5F6FB}
+.dbar{display:flex;align-items:center;gap:10px}
+.dbar .trk{flex:1;height:14px;position:relative;border-left:1px solid #99C4E3}
+.dbar .fill{position:absolute;left:0;top:0;bottom:0;background:#7A7A7A}
+.dbar .val{width:48px;text-align:right;font-weight:bold}
+@media (max-width:600px){.mtx td:first-child{white-space:normal}.dbar{gap:6px}.dbar .val{width:38px}.mtx td,.mtx th{padding:7px 4px}}
+/* ---------- tablas ---------- */
+.tbl{max-height:640px;overflow:auto;font-size:8pt;color:var(--fg)}
+.tbl table{border-collapse:collapse;width:100%;min-width:900px}
+.tbl thead th{position:sticky;top:0;background:#fff;font-weight:bold;text-align:left;padding:6px 5px;border-bottom:1px solid #b3b3b3;vertical-align:bottom;z-index:1}
+.tbl td{padding:5px;border-bottom:1px solid #EDEDED;vertical-align:top}
+.tbl tbody tr:nth-child(even) td{background:#F7F7F7}
+.tbl.c td,.tbl.c th{text-align:center}
+.cnt{font-size:8pt;color:#888;margin-top:6px}
+.tbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 8px;flex-wrap:wrap}
+.tbar .ptitle{margin:0}
+.xbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid #1D6F42;background:#fff;color:#1D6F42;font:inherit;font-size:9pt;padding:6px 12px;border-radius:5px;cursor:pointer}
+.xbtn:hover{background:#1D6F42;color:#fff}
+.xbtn svg{flex:none}
+/* leyenda */
+.lgd{display:flex;gap:14px;font-size:8.5pt;color:var(--gray);align-items:center;margin-bottom:4px}
+.lgd i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.chip{display:inline-flex;gap:6px;align-items:center;font-size:10px;background:var(--navy-d);color:#fff;border-radius:12px;padding:3px 4px 3px 10px;margin-left:8px;vertical-align:2px}
+.chip button{border:0;background:rgba(255,255,255,.25);color:#fff;border-radius:50%;width:16px;height:16px;line-height:14px;cursor:pointer;font-size:11px;padding:0}
+/* tooltip */
+#tt{position:fixed;z-index:50;pointer-events:none;background:#fff;border:1px solid #c8c8c8;box-shadow:0 2px 8px rgba(0,0,0,.18);font-size:8pt;color:#333;padding:6px 8px;max-width:440px;display:none}
+#tt table{border-collapse:collapse}
+#tt th{text-align:left;border-bottom:1px solid #999;padding:2px 6px 3px 0;font-weight:bold}
+#tt td{padding:2px 6px 2px 0;border-bottom:1px solid #eee;white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis}
+#tt .h{font-weight:bold;margin-bottom:3px;color:var(--navy-d)}
+@media print{.appbar,.hint{display:none}.sheet{display:block!important;page-break-after:always}}
+</style>
+</head>
+<body>
+<header class="appbar">
+  <div class="appbar-in">
+    <div class="brand">Plan de Ventas 2026</div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" data-sec="lic" aria-selected="true">Licitaciones – Seguimiento Regional</button>
+      <button class="tab" role="tab" data-sec="vd" aria-selected="false">Venta Directa</button>
+      <button class="tab" role="tab" data-sec="pp" aria-selected="false">PP por escriturar</button>
+    </nav>
+    <div class="corte" id="corte"></div>
+  </div>
+</header>
+
+<main>
+  <!-- ===================== LICITACIONES ===================== -->
+  <section class="sheet" id="sh-lic">
+    <div class="phead">
+      <h1>Plan de Ventas 2026 - Seguimiento Regional</h1>
+      <p>Etapas de Inmuebles a Licitar Nivel Nacional <span id="chipLic"></span></p>
+      <p class="hint">Haz clic en una macroetapa, una barra o una región para filtrar los indicadores y gráficos; vuelve a hacer clic para limpiar. Pasa el cursor sobre las barras para ver los inmuebles.</p>
+    </div>
+    <div class="grid kpis3">
+      <div class="kpi duo" id="kpiOfertas"></div>
+      <div class="kpi duo" id="kpiPub"></div>
+      <div class="kpi" id="kpiAvance"></div>
+    </div>
+    <div class="sec-lbl">Etapas</div>
+    <div class="grid split">
+      <div class="panel"><h3 class="ptitle">Inmuebles por macroetapa</h3><div id="macroCards" style="height:560px"></div></div>
+      <div class="panel"><h3 class="ptitle">Estado de trámite de los Expedientes</h3><div class="chart" id="barEtapas" style="height:560px"></div></div>
+    </div>
+    <div class="sec-lbl">Regiones</div>
+    <div class="panel"><h3 class="ptitle">Avance por Región</h3><div class="mtx" id="mtxRegion"></div></div>
+    <div class="sec-lbl">Comparación con período anterior</div>
+    <div class="panel"><h3 class="ptitle">Estado de trámite de los Expedientes – Actual vs PA</h3>
+      <p class="psub">Total nacional; no responde a los filtros de esta hoja.</p>
+      <div class="chart" id="colPA" style="height:440px"></div></div>
+  </section>
+
+  <!-- ===================== VENTA DIRECTA ===================== -->
+  <section class="sheet" id="sh-vd">
+    <div class="phead">
+      <h1>Plan de Ventas 2026 - Venta Directa</h1>
+      <p>Etapas de Inmuebles por Venta Directa <span id="chipVD"></span></p>
+      <p class="hint">Haz clic en un hito del gráfico para filtrar los indicadores y la tabla; vuelve a hacer clic para limpiar.</p>
+    </div>
+    <div class="grid kpis" id="kpisVD"></div>
+    <div class="sec-lbl">Hitos</div>
+    <div class="panel"><h3 class="ptitle">Venta Directa - N° Expediente por Hito</h3><div class="chart" id="barVD" style="height:360px"></div></div>
+    <div class="sec-lbl">Detalle de expedientes</div>
+    <div class="panel"><div class="tbar"><h3 class="ptitle">Expedientes de Venta Directa</h3><button class="xbtn" data-x="vd"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>Descargar Excel</button></div>
+      <div class="tbl" id="tblVD"></div><div class="cnt" id="cntVD"></div></div>
+  </section>
+
+  <!-- ===================== PP POR ESCRITURAR ===================== -->
+  <section class="sheet" id="sh-pp">
+    <div class="phead">
+      <h1>Plan de Ventas 2026 - Propuestas Públicas Pasadas</h1>
+      <p>Etapas de Inmuebles de Propuestas Públicas Pasadas por Escriturar</p>
+    </div>
+    <div class="grid kpis" id="kpisPP"></div>
+    <div class="sec-lbl">Detalle de expedientes</div>
+    <div class="panel"><div class="tbar"><h3 class="ptitle">Expedientes VPP por escriturar</h3><button class="xbtn" data-x="pp"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>Descargar Excel</button></div>
+      <div class="tbl c" id="tblVPP"></div><div class="cnt" id="cntPP"></div></div>
+  </section>
+</main>
+<div id="tt"></div>
+
+<script>
+const D = /*__DATA__*/null;
+
+/* ================= utilidades ================= */
+const fmtN = n => (n==null||isNaN(n)) ? "(En blanco)" : Math.round(n).toLocaleString("es-CL");
+const fmtP = x => (x==null||isNaN(x)) ? "(En blanco)" : Math.round(x*100) + " %";
+const esc = s => s==null ? "" : String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const up = s => s==null ? null : String(s).toUpperCase();   // PBI compara texto sin distinguir mayúsculas
+const BLANK = "(En blanco)";
+const cmpTxt = (a,b) => String(a).localeCompare(String(b), "es");
+const $ = id => document.getElementById(id);
+
+/* ================= modelo (replica relaciones PBI) ================= */
+const ETAPA = Object.fromEntries(D.etapas.map(e => [up(e.e), e]));
+const REG_BY_KEY = Object.fromEntries(D.regiones.map(r => [up(r.key), r]));      // Seg Regional[REGION] -> M_Regiones[Key]
+const REG_BY_NAME = Object.fromEntries(D.regiones.map(r => [up(r.region), r]));  // Web[Región] -> M_Regiones[Region]
+const EV = Object.fromEntries(D.etapaVenta.map(e => [up(e.act), e]));             // Sistred.ACTIVIDAD -> M_Etapa_Venta
+const SEG = D.seg.map(r => ({...r, E: ETAPA[up(r.etapa)] || null, R: (REG_BY_KEY[up(r.reg)]||{}).region || null}));
+const SEGPA = D.segPA.map(r => ({...r, E: ETAPA[up(r.etapa)] || null}));
+const OFE = (D.ofertas||[]).map(r => ({...r, R: (REG_BY_NAME[up(r.reg)]||REG_BY_KEY[up(r.reg)]||{}).region || null}));   // "Metropolitana" calza por Key
+const WEB = D.web.map(r => ({...r, R: (REG_BY_NAME[up(r.reg)]||{}).region || null}));
+const VD = D.vd.map(r => ({...r, EV: EV[up(r.act)] || null}));
+const VDPA = D.vdpa.map(r => ({...r, EV: EV[up(r.act)] || null}));
+const ABRV = D.etapas.filter(e => e.abrv !== "0. No iniciado").map(e => e.abrv).sort(cmpTxt);  // filtro visual PBI
+const MAC_EXCL = ["0. No iniciado","5. Publicación","6. Ofertas y Apertura","7. Evaluación y Adjudicación","8. Escrituración y Cierre"];
+// Tarjeta agrupada (no existe en el PBI): macroetapas 6, 7 y 8
+const GRUPO_678 = {m:"6-8. Ofertas, Adjudicación y Cierre", members:["6. Ofertas y Apertura","7. Evaluación y Adjudicación","8. Escrituración y Cierre"]};
+const macroMembers = v => v===GRUPO_678.m ? GRUPO_678.members : [v];
+const PROG_TABLE = [["0. No iniciado","0%"],["1.1 Verificar carácter","10%"],["1.2 Elaborar plano","15%"],["1.3 Solicitar enrolamiento","20%"],["2. Oficios y envío expediente","30%"],["3.1 Tasación interna","45%"],["3.2 Tasación externa","55%"],["3.3 CEE","65%"],["4.1 Remitir antecedentes NC","75%"],["4.2 Análisis y Bases","85%"],["4.3 Control legalidad y decreto","95%"],["5. Publicación (meta)","100%"]];
+
+function colorEtapa(lbl){            // formato condicional por prefijo (dataPoint.fill del PBI)
+  const p = String(lbl).charAt(0) + ".";   // "6-8. ..." -> "6."
+  if (["8.","7.","6.","5."].includes(p)) return "#3A5C31";
+  if (p==="4.") return "#568949";
+  if (p==="3."||p==="2.") return "#2E3192";
+  if (p==="1.") return "#8283BE";
+  return "#2E3192";
+}
+
+/* ================= tooltip ================= */
+const TT = $("tt");
+function showTT(ev, html){ TT.innerHTML = html; TT.style.display = "block"; moveTT(ev); }
+function moveTT(ev){
+  const w = TT.offsetWidth, h = TT.offsetHeight; let x = ev.clientX + 14, y = ev.clientY + 14;
+  if (x + w > innerWidth - 8) x = Math.max(8, ev.clientX - w - 14); if (y + h > innerHeight - 8) y = innerHeight - h - 8;
+  TT.style.left = x + "px"; TT.style.top = Math.max(8,y) + "px";
+}
+function hideTT(){ TT.style.display = "none"; }
+function bindTT(root, sel, fn){
+  root.querySelectorAll(sel).forEach(el => {
+    el.addEventListener("mouseenter", ev => showTT(ev, fn(el)));
+    el.addEventListener("mousemove", moveTT);
+    el.addEventListener("mouseleave", hideTT);
+  });
+}
+
+/* ================= ejes ================= */
+function niceMax(m){ if (m<=0) return 1; const p = Math.pow(10, Math.floor(Math.log10(m))); for (const k of [1,2,2.5,5,10]) if (k*p >= m) return k*p; return 10*p; }
+function ticks(max){ const n = max<=5 ? max : 5; const st = max/n; return Array.from({length:n+1}, (_,i) => Math.round(i*st*100)/100); }
+function legendHTML(series){ return `<div class="lgd">${series.map(s=>`<span><i style="background:${s.color}"></i>${esc(s.name)}</span>`).join("")}</div>`; }
+
+/* ---------- barras horizontales (agrupadas, con resaltado tipo PBI) ---------- */
+function hbar(el, o){
+  const lg = o.legend ? legendHTML(o.series) : "";
+  el.innerHTML = lg + `<svg></svg>`;
+  const lgH = o.legend ? el.querySelector(".lgd").offsetHeight + 4 : 0;
+  const W = el.clientWidth, H = el.clientHeight - lgH;
+  const L = Math.min(o.labelW, W*0.45), R = 30, B = 22, plotH = H - B - 4, plotW = Math.max(40, W - L - R);
+  const cats = o.cats, nS = o.series.length;
+  const max = niceMax(Math.max(1, ...o.series.flatMap(s => s.values.map(v => v||0))));
+  const band = plotH / Math.max(cats.length,1), inner = band*0.8, bh = inner/nS;
+  const fs = W < 500 ? 8 : 9;
+  let g = "";
+  for (const t of ticks(max)){ const x = L + t/max*plotW;
+    g += `<line x1="${x}" x2="${x}" y1="0" y2="${plotH}" stroke="#E6E6E6" stroke-dasharray="1,2"/>`;
+    g += `<text x="${x}" y="${plotH+15}" font-size="9" fill="#777" text-anchor="middle">${t.toLocaleString("es-CL")}</text>`; }
+  cats.forEach((c,i) => {
+    const y0 = i*band + (band-inner)/2, dimCat = o.selCat!=null && o.selCat!==c;
+    const maxCh = Math.floor(L/(fs*0.62)); const lbl = String(c).length > maxCh ? String(c).slice(0,maxCh-1)+"…" : c;
+    g += `<g class="clk bar" data-cat="${esc(c)}"><rect x="0" y="${i*band}" width="${W}" height="${band}" fill="transparent"/>`;
+    g += `<text x="${L-6}" y="${y0+inner/2+3.5}" font-size="${fs}" fill="#595959" text-anchor="end">${esc(lbl)}</text>`;
+    o.series.forEach((s,k) => {
+      const v = s.values[i], y = y0 + k*bh, col = typeof s.color==="function" ? s.color(c) : s.color, hv = s.hi ? s.hi[i] : null;
+      if (v==null) return;
+      if (hv!=null){
+        g += `<rect x="${L}" y="${y}" width="${v/max*plotW}" height="${bh-1}" fill="${col}" opacity=".3"/>`;
+        g += `<rect x="${L}" y="${y}" width="${hv/max*plotW}" height="${bh-1}" fill="${col}"/>`;
+        g += `<text x="${L+hv/max*plotW+4}" y="${y+bh/2+3.5}" font-size="9" fill="#333">${hv.toLocaleString("es-CL")}</text>`;
+      } else {
+        g += `<rect x="${L}" y="${y}" width="${v/max*plotW}" height="${bh-1}" fill="${col}" opacity="${dimCat?.3:1}"/>`;
+        g += `<text x="${L+v/max*plotW+4}" y="${y+bh/2+3.5}" font-size="9" fill="#333">${v.toLocaleString("es-CL")}</text>`;
+      }
+    });
+    g += `</g>`;
+  });
+  const svg = el.querySelector("svg"); svg.setAttribute("width", W); svg.setAttribute("height", H); svg.style.display = "block"; svg.innerHTML = g;
+}
+
+/* ---------- columnas verticales agrupadas ---------- */
+function vbar(el, o){
+  el.innerHTML = legendHTML(o.series) + `<svg></svg>`;
+  const lgH = el.querySelector(".lgd").offsetHeight + 6;
+  const W = el.clientWidth, H = el.clientHeight - lgH, L = 34, R = 6, B = 46;
+  const plotW = W-L-R, plotH = H-B-14, cats = o.cats, nS = o.series.length;
+  const max = niceMax(Math.max(1, ...o.series.flatMap(s => s.values)));
+  const band = plotW/cats.length, inner = band*0.8, bw = inner/nS, top = 14, small = band < 60;
+  let g = "";
+  for (const t of ticks(max)){ const y = top + plotH - t/max*plotH;
+    g += `<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="#E6E6E6" stroke-dasharray="1,2"/>`;
+    g += `<text x="${L-6}" y="${y+3}" font-size="9" fill="#777" text-anchor="end">${t.toLocaleString("es-CL")}</text>`; }
+  cats.forEach((c,i) => {
+    const x0 = L + i*band + (band-inner)/2;
+    g += `<g class="bar" data-cat="${esc(c)}"><rect x="${L+i*band}" y="${top}" width="${band}" height="${plotH}" fill="transparent"/>`;
+    o.series.forEach((s,k) => { const v = s.values[i], h = v/max*plotH, x = x0 + k*bw;
+      g += `<rect x="${x}" y="${top+plotH-h}" width="${Math.max(1,bw-2)}" height="${h}" fill="${s.color}"/>`;
+      if (!small || v>0) g += `<text x="${x+(bw-2)/2}" y="${top+plotH-h-4}" font-size="${small?7.5:9}" fill="#333" text-anchor="middle">${v.toLocaleString("es-CL")}</text>`; });
+    if (small){ // en pantallas angostas solo el código de etapa
+      g += `<text x="${L+i*band+band/2}" y="${top+plotH+14}" font-size="8" fill="#595959" text-anchor="middle">${esc(String(c).split(" ")[0])}</text>`;
+    } else {
+      const maxC = Math.max(8, Math.floor(band/6)), lines = [];   // ajuste de texto en hasta 3 líneas
+      for (const w of String(c).split(" ")){ const last = lines[lines.length-1];
+        if (last!=null && (last+" "+w).length <= maxC) lines[lines.length-1] = last+" "+w; else lines.push(w); }
+      if (lines.length > 3){ lines.length = 3; lines[2] = lines[2].slice(0, maxC-1) + "…"; }
+      lines.forEach((ln,k) => { g += `<text x="${L+i*band+band/2}" y="${top+plotH+14+k*11}" font-size="9" fill="#595959" text-anchor="middle">${esc(ln)}</text>`; });
+    }
+    g += `</g>`;
+  });
+  const svg = el.querySelector("svg"); svg.setAttribute("width", W); svg.setAttribute("height", H); svg.style.display = "block"; svg.innerHTML = g;
+}
+function chip(el, txt, clear){ el.innerHTML = txt ? `<span class="chip">Filtro: ${esc(txt)} <button title="Limpiar filtro">×</button></span>` : ""; if (txt) el.querySelector("button").onclick = clear; }
+
+/* ================= LICITACIONES ================= */
+let selDash = null;   // {src:'region'|'abrv'|'macro', val}
+const inSel = (r, ex) => !selDash || selDash.src===ex || (selDash.src==="region" ? r.R===selDash.val : selDash.src==="abrv" ? (r.E&&r.E.abrv)===selDash.val : (r.E && macroMembers(selDash.val).includes(r.E.macro)));
+function setDash(src, val){ selDash = (selDash && selDash.src===src && selDash.val===val) ? null : {src,val}; renderLic(); }
+
+function renderLic(){
+  const rows = SEG.filter(r => inSel(r));
+  const web = WEB.filter(w => !selDash || selDash.src!=="region" || w.R===selDash.val);   // Web solo se relaciona con M_Regiones
+  chip($("chipLic"), selDash && selDash.val, () => { selDash = null; renderLic(); });
+  // "filtrado" solo donde aplica: Web y Ofertas únicamente se relacionan con regiones
+  const byReg = !!selDash && selDash.src==="region", noEtapa = !!selDash && !byReg;
+  $("kpiOfertas").classList.toggle("filt", byReg); $("kpiPub").classList.toggle("filt", !!selDash); $("kpiAvance").classList.toggle("filt", !!selDash);
+  const NOTE = `<div class="sub">no se filtra por etapa</div>`;
+
+  // KPI 1 · Ofertas recibidas | Valor UF mayor oferta (Ofertas WEB.xlsx)
+  const ofe = OFE.filter(o => !byReg || o.R===selDash.val), con = ofe.filter(o => o.ofe);
+  const mto = con.reduce((a,o) => a + (o.monto||0), 0);
+  $("kpiOfertas").innerHTML = `<div><div class="ttl">Ofertas Recibidas</div><div class="val" style="color:#23256E">${fmtN(con.length)}</div>
+      <div class="sub">de ${fmtN(ofe.length)} expedientes con apertura</div>${noEtapa?NOTE:""}</div>
+    <div><div class="ttl">Valor UF Mayor Oferta</div><div class="val" style="color:#23256E">${fmtN(mto)} UF</div>
+      <div class="sub">suma de la mayor oferta por expediente</div></div>`;
+
+  // KPI 2 · Inmuebles Publicados | Valor Comercial Mínimo: Indicador = [ExpWeb], Meta = Recuento ID DBN
+  const ind = web.length, goal = rows.filter(r => r.id!=null).length, good = ind >= goal, col = good ? "#568949" : "#23256E";
+  const val = web.reduce((a,w) => a + (w.valor||0), 0);
+  $("kpiPub").innerHTML = `<div><div class="ttl">Inmuebles Publicados</div><div class="val" style="color:${col}">${fmtN(ind)}</div>
+      <div class="sub">Meta: ${fmtN(goal)}${goal?` · ${fmtP(ind/goal)}`:""}</div><div class="bar"><i style="width:${goal?Math.min(100,ind/goal*100):0}%;background:${col}"></i></div>${noEtapa?NOTE.replace("no se","publicados no se"):""}</div>
+    <div><div class="ttl">Valor Comercial Mínimo</div><div class="val" style="color:#23256E">${fmtN(val)} UF</div>
+      <div class="sub">inmuebles publicados en web</div>${noEtapa?NOTE:""}</div>`;
+  // KPI 3 · Avance para Publicar = promedio Progreso Etapa
+  const av = rows.length ? rows.reduce((a,r) => a + (r.E?r.E.prog:0), 0)/rows.length : null;
+  const ka = $("kpiAvance");
+  ka.innerHTML = `<div class="ttl">Avance para Publicar</div><div class="val">${fmtP(av)}</div><div class="cap">Promedio del progreso de cada inmueble hacia la publicación</div>`;
+  ka.onmouseenter = ev => showTT(ev, `<div class="h">Progreso asignado por etapa</div><table><tr><th>Etapa</th><th>Progreso</th></tr>${PROG_TABLE.map(r=>`<tr><td>${r[0]}</td><td style="text-align:right">${r[1]}</td></tr>`).join("")}</table>`);
+  ka.onmousemove = moveTT; ka.onmouseleave = hideTT;
+
+  // Macroetapas 1 a 4 + grupo 6-8 (ordenadas por numeración) - % sobre el total de las tarjetas
+  const rowsM = SEG.filter(r => inSel(r,"macro"));
+  const MAC = [...new Set(D.etapas.map(e => e.macro))].filter(m => !MAC_EXCL.includes(m)).sort(cmpTxt).concat([GRUPO_678.m]);
+  const mc = MAC.map(m => ({m, n: rowsM.filter(r => r.E && macroMembers(m).includes(r.E.macro)).length}));
+  const tot = mc.reduce((a,x) => a+x.n, 0);
+  const box = $("macroCards");
+  box.innerHTML = `<div class="mcards">${mc.map(x => { const st = selDash&&selDash.src==="macro" ? (selDash.val===x.m?" sel":" dim") : "";
+      return `<div class="mcard${st}" data-m="${esc(x.m)}"><div class="hd" style="background:${colorEtapa(x.m)}"${x.m===GRUPO_678.m?` title="Agrupa: ${esc(GRUPO_678.members.join(" · "))}"`:""}>${esc(x.m)}</div>
+      <div class="bd"><div class="v1">${fmtN(x.n)}<span class="lb">Inmuebles</span></div><div class="v2">${tot? fmtP(x.n/tot) : BLANK}<span class="lb">Porcentaje</span></div></div></div>`; }).join("")}</div>`;
+  box.querySelectorAll(".mcard").forEach(c => c.onclick = () => setDash("macro", c.dataset.m));
+
+  // Estado de trámite de los Expedientes (Inmuebles por Etapa Abrv)
+  const all = ABRV.map(a => SEG.filter(r => r.E && r.E.abrv===a).length);
+  const part = ABRV.map(a => rows.filter(r => r.E && r.E.abrv===a).length);
+  const be = $("barEtapas");
+  hbar(be, {cats:ABRV, labelW:200, series:[{name:"Inmuebles", color: c => colorEtapa(c), values: all, hi: selDash && selDash.src!=="abrv" ? part : null}],
+    selCat: selDash && selDash.src==="abrv" ? selDash.val : null});
+  be.querySelectorAll(".bar").forEach(b => b.onclick = () => setDash("abrv", b.dataset.cat));
+  bindTT(be, ".bar", b => {   // tooltip "Info Expediente"
+    const list = rows.filter(r => r.E && r.E.abrv===b.dataset.cat).sort((a,c)=>cmpTxt(a.inm||"",c.inm||""));
+    const head = `<div class="h">${esc(b.dataset.cat)} · ${list.length} inmueble(s)</div>`;
+    if (!list.length) return head;
+    const max = 14;
+    return head + `<table><tr><th>INMUEBLE (UC)</th><th>Región</th><th>Expediente</th></tr>${list.slice(0,max).map(r=>`<tr><td>${esc(r.inm)}</td><td>${esc(r.reg)}</td><td>${esc(r.exp)}</td></tr>`).join("")}</table>${list.length>max?`<div style="margin-top:3px;color:#777">+ ${list.length-max} más…</div>`:""}`;
+  });
+
+  // Avance por Región (todas las regiones: [Inmuebles] tiene +0)
+  const rowsR = SEG.filter(r => inSel(r,"region"));
+  const reg = D.regiones.map(r => { const rr = rowsR.filter(x => x.R===r.region); return {r:r.region, cod:r.cod, n:rr.length, av: rr.length ? rr.reduce((a,x)=>a+(x.E?x.E.prog:0),0)/rr.length : null}; });
+  reg.sort((a,b) => (b.av??-1) - (a.av??-1) || a.cod - b.cod);
+  const fc = v => v==null ? "#595959" : v>=0.7 ? "#599816" : v>=0.3 ? "#595959" : "#C00000";
+  const mt = $("mtxRegion");
+  mt.innerHTML = `<table><colgroup><col style="width:34%"><col style="width:9%"><col></colgroup>
+    <thead><tr><th style="text-align:left">Región</th><th>N°</th><th style="text-align:left">Avance</th></tr></thead><tbody>
+    ${reg.map(x => `<tr data-r="${esc(x.r)}" class="${selDash&&selDash.src==="region"?(selDash.val===x.r?"sel":"dim"):""}"><td>${esc(x.r)}</td><td style="text-align:center">${x.n}</td>
+      <td><div class="dbar"><div class="trk"><div class="fill" style="width:${(x.av||0)*100}%"></div></div><div class="val" style="color:${fc(x.av)}">${x.av==null?"":fmtP(x.av)}</div></div></td></tr>`).join("")}
+    </tbody></table>`;
+  mt.querySelectorAll("tbody tr").forEach(tr => tr.onclick = () => setDash("region", tr.dataset.r));
+
+  // Actual vs PA (nacional, sin filtros cruzados)
+  const el = $("colPA");
+  const pa = ABRV.map(a => SEGPA.filter(r => r.E && r.E.abrv===a).length);
+  const ac = ABRV.map(a => SEG.filter(r => r.E && r.E.abrv===a).length);
+  vbar(el, {cats:ABRV, series:[{name:"Inmuebles PA", color:"#CCCCCC", values:pa}, {name:"Inmuebles", color:"#2E3192", values:ac}]});
+  bindTT(el, ".bar", b => { const i = ABRV.indexOf(b.dataset.cat), dlt = ac[i]-pa[i];
+    return `<div class="h">${esc(b.dataset.cat)}</div><table><tr><td>Inmuebles PA</td><td style="text-align:right"><b>${pa[i]}</b></td></tr><tr><td>Inmuebles</td><td style="text-align:right"><b>${ac[i]}</b></td></tr><tr><td>Variación</td><td style="text-align:right">${dlt>0?"+":""}${dlt}</td></tr></table>`; });
+}
+
+/* ================= VENTA DIRECTA ================= */
+let selVD = null;
+const etapaOf = r => r.EV ? r.EV.etapa : BLANK;
+function renderVD(){
+  const rows = VD.filter(r => selVD==null || etapaOf(r)===selVD);
+  chip($("chipVD"), selVD, () => { selVD = null; renderVD(); });
+  // KPI: Recuento NRO_EXPEDIENTE, [MetaAprob], [ValorVenta]
+  const tot = rows.filter(r => r.exp!=null).length;
+  const ap1 = rows.filter(r => r.EV && r.EV.cumpl==="1"), ap2 = rows.filter(r => r.estado==="Finalizado");
+  const meta = ap1.length + ap2.length;
+  const valor = ap1.reduce((a,r)=>a+(r.precio||0),0) + ap2.reduce((a,r)=>a+(r.precio||0),0);
+  $("kpisVD").innerHTML = [[fmtN(tot), "Inmuebles Totales Venta Directa"], [fmtN(meta), "Inmuebles con Decreto Aprobatorio"], [fmtN(valor)+" UF", "Valor Venta Inm. con Decreto Aprobatorio"]]
+    .map(x => `<div class="kpi red${selVD!=null?" filt":""}"><div class="ttl">${x[1]}</div><div class="val">${x[0]}</div></div>`).join("");
+
+  // N° Expediente por Hito (filtro visual: ESTADO_SISTEMA = "En Proceso" solo sobre Ventas Directas)
+  const order = [...new Map(D.etapaVenta.map(e => [e.etapa, e.ordenEtapa])).entries()].sort((a,b)=>a[1]-b[1]).map(x=>x[0]);
+  const cats0 = [BLANK, ...order];
+  const cPA = cats0.map(c => VDPA.filter(r => r.exp!=null && etapaOf(r)===c).length);
+  const cAC = cats0.map(c => VD.filter(r => r.exp!=null && r.estado==="En Proceso" && etapaOf(r)===c).length);
+  const keep = cats0.map((c,i) => cPA[i]>0 || cAC[i]>0);
+  const cats = cats0.filter((c,i)=>keep[i]);
+  const el = $("barVD");
+  hbar(el, {cats, labelW:310, legend:true, selCat:selVD,
+    series:[{name:"N° Expediente PA", color:"#CCCCCC", values:cPA.filter((v,i)=>keep[i]).map(v=>v||null)},
+            {name:"N° Expediente", color:"#C00000", values:cAC.filter((v,i)=>keep[i]).map(v=>v||null)}]});
+  el.querySelectorAll(".bar").forEach(b => b.onclick = () => { selVD = selVD===b.dataset.cat ? null : b.dataset.cat; renderVD(); });
+  bindTT(el, ".bar", b => { const j = cats0.indexOf(b.dataset.cat);
+    return `<div class="h">${esc(b.dataset.cat)}</div><table><tr><td>N° Expediente PA</td><td style="text-align:right"><b>${cPA[j]||""}</b></td></tr><tr><td>N° Expediente (En Proceso)</td><td style="text-align:right"><b>${cAC[j]||""}</b></td></tr></table>`; });
+
+  // Tabla detalle (orden por Actividad -> columna Orden del maestro)
+  const t = [...rows].sort((a,b) => (a.EV?a.EV.orden:-1) - (b.EV?b.EV.orden:-1) || cmpTxt(a.exp||"", b.exp||""));
+  const cols = [["N° Exp",7,r=>r.exp],["Región",8,r=>r.reg],["Comuna",8,r=>r.comuna],["Ubicación",15,r=>r.ubic],["Estado",7,r=>r.estado],
+    ["Etapa",16,r=>r.EV&&r.EV.etapa],["Actividad",20,r=>r.EV&&r.EV.actividad],["Fecha Actividad",7,r=>r.fecha],["Asignado",12,r=>r.asig]];
+  $("tblVD").innerHTML = `<table><colgroup>${cols.map(c=>`<col style="width:${c[1]}%">`).join("")}</colgroup>
+    <thead><tr>${cols.map(c=>`<th>${c[0]}</th>`).join("")}</tr></thead>
+    <tbody>${t.map(r=>`<tr>${cols.map(c=>`<td>${esc(c[2](r))}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+  $("cntVD").textContent = `${t.length} expediente(s)${selVD!=null?` en ${selVD}`:""}`;
+  EXPORT.vd = {file:`Venta Directa - Expedientes${selVD!=null?" ("+selVD.replace(/[\\/:*?"<>|]/g,"")+")":""} - datos al ${D.meta.corte}.xlsx`, sheet:"Venta Directa",
+    cols: cols.map(c=>[c[0], c[1]*2.4]), rows: t.map(r => cols.map(c => c[2](r)))};
+}
+
+/* ================= PP POR ESCRITURAR ================= */
+function renderPP(){
+  const n = D.vpp.filter(r => r.exp!=null).length, fin = D.vpp.filter(r => r.estado==="Finalizado").length;
+  $("kpisPP").innerHTML = [[fmtN(n),"N° Expediente totales VPP"],[fmtN(fin),"Ventas Finalizadas"],["0 UF","Valor Venta"]]
+    .map(x => `<div class="kpi green"><div class="ttl">${x[1]}</div><div class="val">${x[0]}</div></div>`).join("");
+  const t = [...D.vpp].sort((a,b) => cmpTxt(a.etapa||"", b.etapa||""));
+  const cols = [["N° Expte VPP",13,r=>r.exp],["Etapa",37,r=>r.etapa],["Región",12,r=>r.region],["Provincia",10,r=>r.prov],["Ubicación Inmueble",28,r=>r.ubic]];
+  $("tblVPP").innerHTML = `<table><colgroup>${cols.map(c=>`<col style="width:${c[1]}%">`).join("")}</colgroup>
+    <thead><tr>${cols.map(c=>`<th>${c[0]}</th>`).join("")}</tr></thead>
+    <tbody>${t.map(r=>`<tr>${cols.map(c=>`<td>${esc(c[2](r))}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+  $("cntPP").textContent = `${t.length} expediente(s)`;
+  EXPORT.pp = {file:`PP por escriturar - Expedientes VPP - datos al ${D.meta.corte}.xlsx`, sheet:"PP por escriturar",
+    cols: cols.map(c=>[c[0], c[1]*2.4]), rows: t.map(r => cols.map(c => c[2](r)))};
+}
+
+/* ================= descarga Excel (.xlsx nativo, sin librerías) ================= */
+const EXPORT = {};
+const CRC = (() => { const t = new Uint32Array(256); for (let n=0;n<256;n++){ let c=n; for (let k=0;k<8;k++) c = c&1 ? 0xEDB88320^(c>>>1) : c>>>1; t[n]=c>>>0; } return t; })();
+function crc32(b){ let c = 0xFFFFFFFF; for (let i=0;i<b.length;i++) c = CRC[(c^b[i])&0xFF]^(c>>>8); return (c^0xFFFFFFFF)>>>0; }
+function zipStore(files){   // ZIP sin compresión (método "stored"): suficiente y válido para .xlsx
+  const enc = new TextEncoder(), parts = [], cen = []; let off = 0;
+  for (const f of files){
+    const name = enc.encode(f.name), data = enc.encode(f.data), crc = crc32(data);
+    const h = new DataView(new ArrayBuffer(30));
+    h.setUint32(0,0x04034b50,true); h.setUint16(4,20,true); h.setUint16(6,0x0800,true); h.setUint16(8,0,true);
+    h.setUint32(14,crc,true); h.setUint32(18,data.length,true); h.setUint32(22,data.length,true); h.setUint16(26,name.length,true);
+    parts.push(new Uint8Array(h.buffer), name, data);
+    const c = new DataView(new ArrayBuffer(46));
+    c.setUint32(0,0x02014b50,true); c.setUint16(4,20,true); c.setUint16(6,20,true); c.setUint16(8,0x0800,true);
+    c.setUint32(16,crc,true); c.setUint32(20,data.length,true); c.setUint32(24,data.length,true); c.setUint16(28,name.length,true); c.setUint32(42,off,true);
+    cen.push(new Uint8Array(c.buffer), name);
+    off += 30 + name.length + data.length;
+  }
+  const cs = cen.reduce((a,b)=>a+b.length,0), e = new DataView(new ArrayBuffer(22));
+  e.setUint32(0,0x06054b50,true); e.setUint16(8,files.length,true); e.setUint16(10,files.length,true); e.setUint32(12,cs,true); e.setUint32(16,off,true);
+  return new Blob([...parts, ...cen, new Uint8Array(e.buffer)], {type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+}
+const xesc = v => String(v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,"").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function colL(i){ let s=""; i++; while(i){ const m=(i-1)%26; s=String.fromCharCode(65+m)+s; i=Math.floor((i-1)/26); } return s; }
+function xlsx(x){
+  const nC = x.cols.length, nR = x.rows.length + 1, ref = `A1:${colL(nC-1)}${nR}`;
+  const cell = (v,r,c,st) => { const a = colL(c)+r;
+    if (v==null || v==="") return `<c r="${a}"${st?` s="${st}"`:""}/>`;
+    if (typeof v==="number" && isFinite(v)) return `<c r="${a}"${st?` s="${st}"`:""}><v>${v}</v></c>`;
+    return `<c r="${a}" t="inlineStr"${st?` s="${st}"`:""}><is><t xml:space="preserve">${xesc(v)}</t></is></c>`; };
+  const rows = [`<row r="1">${x.cols.map((c,i)=>cell(c[0],1,i,1)).join("")}</row>`]
+    .concat(x.rows.map((r,j)=>`<row r="${j+2}">${r.map((v,i)=>cell(v,j+2,i,2)).join("")}</row>`)).join("");
+  const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">`+
+    `<sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>`+
+    `<cols>${x.cols.map((c,i)=>`<col min="${i+1}" max="${i+1}" width="${Math.max(10,Math.round(c[1]))}" customWidth="1"/>`).join("")}</cols>`+
+    `<sheetData>${rows}</sheetData><autoFilter ref="${ref}"/></worksheet>`;
+  const styles = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">`+
+    `<fonts count="2"><font><sz val="10"/><name val="Verdana"/></font><font><b/><sz val="10"/><color rgb="FFFFFFFF"/><name val="Verdana"/></font></fonts>`+
+    `<fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF23256E"/><bgColor indexed="64"/></patternFill></fill></fills>`+
+    `<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>`+
+    `<cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>`+
+    `<xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>`+
+    `<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf></cellXfs>`+
+    `<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+  const sh = xesc(x.sheet.slice(0,31));
+  return zipStore([
+    {name:"[Content_Types].xml", data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`},
+    {name:"_rels/.rels", data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`},
+    {name:"xl/workbook.xml", data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="${sh}" sheetId="1" r:id="rId1"/></sheets><definedNames><definedName name="_xlnm._FilterDatabase" localSheetId="0" hidden="1">'${sh}'!$A$1:$${colL(nC-1)}$${nR}</definedName></definedNames></workbook>`},
+    {name:"xl/_rels/workbook.xml.rels", data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`},
+    {name:"xl/worksheets/sheet1.xml", data:sheet},
+    {name:"xl/styles.xml", data:styles}
+  ]);
+}
+function descargar(k){
+  const x = EXPORT[k]; if (!x) return;
+  const url = URL.createObjectURL(xlsx(x)), a = document.createElement("a");
+  a.href = url; a.download = x.file; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+
+/* ================= navegación ================= */
+const RENDER = {lic:renderLic, vd:renderVD, pp:renderPP};
+let cur = "lic";
+function show(sec){
+  cur = RENDER[sec] ? sec : "lic";
+  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", t.dataset.sec===cur));
+  document.querySelectorAll(".sheet").forEach(p => p.classList.toggle("on", p.id==="sh-"+cur));
+  RENDER[cur]();
+  try { localStorage.setItem("pv26-sec", cur); } catch(e){}
+}
+document.querySelectorAll(".tab").forEach(t => t.onclick = () => { show(t.dataset.sec); scrollTo({top:0}); });
+document.querySelectorAll(".xbtn").forEach(b => b.onclick = () => descargar(b.dataset.x));
+let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => RENDER[cur](), 120); });
+$("corte").textContent = `Datos al ${D.meta.corte} · generado ${D.meta.generado}`;
+let start = "lic"; try { start = localStorage.getItem("pv26-sec") || "lic"; } catch(e){}
+show(start);
+</script>
+</body>
+</html>
